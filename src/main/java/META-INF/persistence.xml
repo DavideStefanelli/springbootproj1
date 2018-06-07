@@ -9,6 +9,7 @@
         <class>sys.entities.ShopEntity</class>
         <class>sys.entities.ShopOwnerEntity</class>
         <class>sys.entities.UserEntity</class>
+        <class>sys.entities.ShopownerEntity</class>
         <properties>
             <property name="toplink.jdbc.url" value="jdbc:mysql://user32.sytes.net:3306/springbootjpa"/>
             <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
