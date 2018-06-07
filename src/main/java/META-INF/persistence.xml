@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <class>sys.entities.CartEntity</class>
+        <class>sys.entities.CategoryEntity</class>
+        <class>sys.entities.ProductEntity</class>
+        <class>sys.entities.PurchaseEntity</class>
+        <class>sys.entities.ShopEntity</class>
+        <class>sys.entities.ShopOwnerEntity</class>
+        <class>sys.entities.UserEntity</class>
+        <properties>
+            <property name="toplink.jdbc.url" value="jdbc:mysql://user32.sytes.net:3306/springbootjpa"/>
+            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://user32.sytes.net:3306/springbootjpa"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://user32.sytes.net:3306/springbootjpa"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://user32.sytes.net:3306/springbootjpa"/>
+            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>
