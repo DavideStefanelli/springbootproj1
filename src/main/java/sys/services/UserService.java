@@ -16,8 +16,9 @@ public class UserService implements IUserService {
 
     @Override
     public boolean registerUser(UserEntity u) {
-        u.setSalt("salt"); //todo
+        u.setSalt("sale"); //todo
         u.setGroupid(1);   //todo
+        u.setShop(null);
         return userRepository.saveAndFlush(u) != null; //todo
     }
 

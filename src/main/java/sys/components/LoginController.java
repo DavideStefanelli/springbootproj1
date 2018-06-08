@@ -6,7 +6,6 @@ import sys.entities.UserEntity;
 import sys.entities.messages.AuthenticationMessage;
 import sys.services.IUserService;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;

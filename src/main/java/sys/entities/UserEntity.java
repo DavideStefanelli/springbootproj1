@@ -3,6 +3,7 @@ package sys.entities;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -17,8 +18,10 @@ public class UserEntity {
     private String password;
     private String salt;
     private Timestamp creationdate;
-    private String sex;
+    private String gender;
     private int groupid;
+    private ShopEntity shop;
+    private Collection<PurchaseEntity> purchases;
 
     @Id
     @Column(name = "id")
@@ -111,13 +114,13 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "sex")
-    public String getSex() {
-        return sex;
+    @Column(name = "gender")
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Basic
@@ -145,12 +148,30 @@ public class UserEntity {
                 Objects.equals(password, that.password) &&
                 Objects.equals(salt, that.salt) &&
                 Objects.equals(creationdate, that.creationdate) &&
-                Objects.equals(sex, that.sex);
+                Objects.equals(gender, that.gender);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, cf, name, surname, birthdate, password, salt, creationdate, sex, groupid);
+        return Objects.hash(id, email, cf, name, surname, birthdate, password, salt, creationdate, gender, groupid);
+    }
+
+    @OneToOne(mappedBy = "owner")
+    public ShopEntity getShop() {
+        return shop;
+    }
+
+    public void setShop(ShopEntity shop) {
+        this.shop = shop;
+    }
+
+    @OneToMany(mappedBy = "buyer")
+    public Collection<PurchaseEntity> getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(Collection<PurchaseEntity> purchases) {
+        this.purchases = purchases;
     }
 }
