@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "purchase", schema = "springbootjpa")
-public class PurchaseEntity {
+public class PurchaseEntity extends BasicEntity {
     private int id;
     private int qt;
     private Timestamp date;

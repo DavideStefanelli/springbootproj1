@@ -1,5 +1,10 @@
 package sys.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.modelmapper.ModelMapper;
+import sys.dtos.UserDTO;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -8,7 +13,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "springbootjpa")
-public class UserEntity {
+public class UserEntity extends BasicEntity {
+
     private int id;
     private String email;
     private String cf;
@@ -19,7 +25,6 @@ public class UserEntity {
     private String salt;
     private Timestamp creationdate;
     private String gender;
-    private int groupid;
     private ShopEntity shop;
     private Collection<PurchaseEntity> purchases;
 
@@ -123,23 +128,12 @@ public class UserEntity {
         this.gender = gender;
     }
 
-    @Basic
-    @Column(name = "groupid")
-    public int getGroupid() {
-        return groupid;
-    }
-
-    public void setGroupid(int groupid) {
-        this.groupid = groupid;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
         return id == that.id &&
-                groupid == that.groupid &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(cf, that.cf) &&
                 Objects.equals(name, that.name) &&
@@ -154,7 +148,7 @@ public class UserEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, cf, name, surname, birthdate, password, salt, creationdate, gender, groupid);
+        return Objects.hash(id, email, cf, name, surname, birthdate, password, salt, creationdate, gender);
     }
 
     @OneToOne(mappedBy = "owner")
@@ -174,4 +168,5 @@ public class UserEntity {
     public void setPurchases(Collection<PurchaseEntity> purchases) {
         this.purchases = purchases;
     }
+
 }

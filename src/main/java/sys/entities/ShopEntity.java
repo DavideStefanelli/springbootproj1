@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "shop", schema = "springbootjpa")
-public class ShopEntity {
+public class ShopEntity extends BasicEntity {
     private int id;
     private String name;
     private String description;

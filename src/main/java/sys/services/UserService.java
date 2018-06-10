@@ -1,46 +1,77 @@
 package sys.services;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import sys.entities.UserEntity;
-import sys.entities.messages.AuthenticationMessage;
+import sys.beans.AuthenticationBean;
+import sys.beans.RegistrationBean;
 import sys.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Marker serviceMarker = MarkerFactory.getMarker("ACCESS_SERVICE");
 
     @Override
-    public boolean registerUser(UserEntity u) {
-        u.setSalt("sale"); //todo
-        u.setGroupid(1);   //todo
+    public RegistrationBean registerUser(UserEntity u) {
+        String salt = Long.toUnsignedString(ThreadLocalRandom.current().nextLong());
+        String passwordHash = DigestUtils.sha256Hex(u.getPassword() + salt);
+        u.setSalt(salt);
+        u.setPassword(passwordHash);
         u.setShop(null);
-        return userRepository.saveAndFlush(u) != null; //todo
+        u.setCreationdate(Timestamp.from(Instant.now()));
+        RegistrationBean registrationBean = new RegistrationBean();
+        try{
+            registrationBean.setUser(userRepository.saveAndFlush(u));
+            registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.SUCCESS);
+        }catch (Exception ex) {
+            if(ex.getCause() instanceof ConstraintViolationException &&
+                    ((ConstraintViolationException) ex.getCause()).getConstraintName().equals("PRIMARY")) {
+                registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ACCOUNT_EXISTING);
+            } else {
+                registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ERROR);
+                logger.error(serviceMarker, "Unhandled error during registration!", ex);
+            }
+        }
+        return registrationBean;
     }
 
     @Override
-    public AuthenticationMessage authenticateUser(String email, String password) {
+    public AuthenticationBean authenticateUser(String email, String password) {
         UserEntity user = userRepository.findByEmail(email);
-        AuthenticationMessage authenticationMsg = new AuthenticationMessage();
+        AuthenticationBean authenticationBean = new AuthenticationBean();
         if(user != null){
-            if(user.getPassword().equals(password)) {
-                authenticationMsg.setUser(user);
-                authenticationMsg.setStatus(AuthenticationMessage.LOGIN_STATUS.LOGIN_OK);
+            String passwordHash = DigestUtils.sha256Hex(password + user.getSalt());
+            if(user.getPassword().equals(passwordHash)) {
+                authenticationBean.setUser(user);
+                authenticationBean.setStatus(AuthenticationBean.LOGIN_STATUS.LOGIN_OK);
             } else {
-                authenticationMsg.setStatus(AuthenticationMessage.LOGIN_STATUS.WRONG_PASSWORD);
+                authenticationBean.setStatus(AuthenticationBean.LOGIN_STATUS.WRONG_PASSWORD);
             }
         }else{
-            authenticationMsg.setStatus(AuthenticationMessage.LOGIN_STATUS.ACCOUNT_NOT_EXISTING);
+            authenticationBean.setStatus(AuthenticationBean.LOGIN_STATUS.ACCOUNT_NOT_EXISTING);
         }
-        return authenticationMsg;
+        return authenticationBean;
     }
 
     @Override
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
     }
+
 }
