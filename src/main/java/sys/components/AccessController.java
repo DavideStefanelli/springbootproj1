@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sys.dtos.AuthenticationDTO;
+import sys.dtos.RegistrationDTO;
 import sys.dtos.UserDTO;
 import sys.entities.UserEntity;
 import sys.beans.AuthenticationBean;
@@ -37,8 +38,8 @@ public class AccessController {
     }
 
     @RequestMapping(value = "/doRegistration", method = RequestMethod.POST)
-    public RegistrationBean registration(@RequestBody UserEntity user) {
-        return userService.registerUser(user);
+    public RegistrationDTO registration(@RequestBody UserEntity user) {
+        return modelMapper.map(userService.registerUser(user), RegistrationDTO.class);
     }
 
 }

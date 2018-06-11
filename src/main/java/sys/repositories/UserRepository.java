@@ -6,7 +6,7 @@ import sys.entities.UserEntity;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRepositoryCustom {
+public interface UserRepository extends JpaRepository<UserEntity, Integer>, UserRepositoryCustom {
 
     UserEntity findByEmail(@Param("email") String email);
     List<UserEntity> findAll();
