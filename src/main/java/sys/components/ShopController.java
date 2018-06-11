@@ -26,7 +26,7 @@ public class ShopController {
     ModelMapper modelMapper;
 
     @GetMapping(value = "/{shopId}/products")
-    public List<ProductDTO> getProducts(@PathVariable Integer shopId){
+    public List<ProductDTO> getProducts(@PathVariable("shopId") Integer shopId){
         List<ProductEntity> shopProducts = shopService.getShopProducts(shopId);
         return shopProducts.stream()
                 .map(product -> product.toDto(modelMapper, ProductDTO.class))
