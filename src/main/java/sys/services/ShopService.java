@@ -4,17 +4,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sys.entities.CategoryEntity;
 import sys.entities.ProductEntity;
 import sys.entities.ShopEntity;
+import sys.repositories.CategoryRepository;
+import sys.repositories.ProductRepository;
 import sys.repositories.ShopRepository;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ShopService implements IShopService {
 
     @Autowired
     ShopRepository shopRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

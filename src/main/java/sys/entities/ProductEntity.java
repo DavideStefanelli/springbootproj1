@@ -16,6 +16,7 @@ public class ProductEntity extends BasicEntity {
     private Collection<PurchaseEntity> purchases;
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;

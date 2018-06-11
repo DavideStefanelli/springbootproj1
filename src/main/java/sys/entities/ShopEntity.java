@@ -16,6 +16,7 @@ public class ShopEntity extends BasicEntity {
     private UserEntity owner;
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;
