@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sys.dtos.ProductDTO;
+import sys.dtos.ShopDTO;
+import sys.dtos.ShopHomeDTO;
 import sys.entities.ProductEntity;
+import sys.entities.ShopEntity;
 import sys.services.ShopService;
 
 import java.util.List;
@@ -26,11 +29,16 @@ public class ShopController {
     ModelMapper modelMapper;
 
     @GetMapping(value = "/{shopId}/products")
-    public List<ProductDTO> getProducts(@PathVariable("shopId") Integer shopId){
+    public List<ProductDTO> getProducts(@PathVariable("shopId") Integer shopId) {
         List<ProductEntity> shopProducts = shopService.getShopProducts(shopId);
         return shopProducts.stream()
                 .map(product -> product.toDto(modelMapper, ProductDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/{shopId}/home")
+    public ShopHomeDTO getShopHome(@PathVariable("shopId") Integer shopId) {
+        return modelMapper.map(shopService.getShopHome(shopId), ShopHomeDTO.class);
     }
 
 }

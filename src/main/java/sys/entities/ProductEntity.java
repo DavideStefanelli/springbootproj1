@@ -11,6 +11,7 @@ public class ProductEntity extends BasicEntity {
     private String name;
     private String description;
     private String image;
+    private float price;
     private ShopEntity shop;
     private CategoryEntity category;
     private Collection<PurchaseEntity> purchases;
@@ -54,6 +55,16 @@ public class ProductEntity extends BasicEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Basic
+    @Column(name = "price")
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     @Override

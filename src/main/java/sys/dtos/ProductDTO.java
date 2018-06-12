@@ -4,6 +4,15 @@ public class ProductDTO extends BasicDTO {
     private int id;
     private String name;
     private String image;
+    private float price;
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
 
     public int getId() {
         return id;

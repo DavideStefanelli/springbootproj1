@@ -5,4 +5,5 @@ import sys.entities.CategoryEntity;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
 
+
 }

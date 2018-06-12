@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import sys.entities.UserEntity;
 import sys.beans.AuthenticationBean;
 import sys.beans.RegistrationBean;
@@ -40,10 +41,16 @@ public class UserService implements IUserService {
             registrationBean.setUser(userRepository.saveAndFlush(u));
             registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.SUCCESS);
         }catch (Exception ex) {
-            if(ex.getCause() instanceof ConstraintViolationException &&
-                    ((ConstraintViolationException) ex.getCause()).getConstraintName().equals("PRIMARY")) {
-                registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ACCOUNT_EXISTING);
-            } else {
+            if(ex.getCause() != null && ex.getCause() instanceof ConstraintViolationException){
+                ConstraintViolationException e = (ConstraintViolationException)ex.getCause();
+                if(e.getConstraintName().equals("UNIQUE_EMAIL")) {
+                    registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ACCOUNT_EXISTING);
+                    logger.info(serviceMarker, "Account existing: " + u.getEmail());
+                } else {
+                    registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ERROR);
+                    logger.error(serviceMarker, "Unhandled error during registration : Constraint violated -> " + e.getConstraintName());
+                }
+            }  else {
                 registrationBean.setStatus(RegistrationBean.REGISTRATION_STATUS.ERROR);
                 logger.error(serviceMarker, "Unhandled error during registration!", ex);
             }

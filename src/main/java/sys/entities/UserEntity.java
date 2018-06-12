@@ -1,10 +1,5 @@
 package sys.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.modelmapper.ModelMapper;
-import sys.dtos.UserDTO;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -12,7 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user", schema = "springbootjpa")
+@Table(name = "user", schema = "springbootjpa", uniqueConstraints = { @UniqueConstraint(name = "UNIQUE_EMAIL", columnNames="email") })
 public class UserEntity extends BasicEntity {
 
     private int id;
