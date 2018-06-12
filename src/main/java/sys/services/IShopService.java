@@ -1,7 +1,7 @@
 package sys.services;
 
 import sys.beans.ShopHomeBean;
-import sys.dtos.ShopHomeDTO;
+import sys.entities.CategoryEntity;
 import sys.entities.ProductEntity;
 import sys.entities.ShopEntity;
 
@@ -14,4 +14,6 @@ public interface IShopService {
 
     ShopHomeBean getShopHome(Integer shopId);
     List<ProductEntity> getFeaturedProducts(ShopEntity shopEntity);
+    List<CategoryEntity> getShopCategories(ShopEntity shop);
+
 }

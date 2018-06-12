@@ -8,6 +8,8 @@ public class ShopHomeDTO extends BasicDTO {
 
     private List<ProductDTO> featuredproducts;
 
+    private List<CategoryDTO> categories;
+
     public ShopDTO getShop() {
         return shop;
     }
@@ -24,4 +26,11 @@ public class ShopHomeDTO extends BasicDTO {
         this.featuredproducts = featuredproducts;
     }
 
+    public List<CategoryDTO> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryDTO> categories) {
+        this.categories = categories;
+    }
 }

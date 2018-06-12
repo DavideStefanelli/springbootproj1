@@ -31,8 +31,19 @@ public class ShopService implements IShopService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Override
+    public ShopHomeBean getShopHome(Integer shopId) {
+        ShopEntity shopEntity = shopRepository.getOne(shopId);
+        if(shopEntity != null) {
+            return new ShopHomeBean(shopEntity, getFeaturedProducts(shopEntity), getShopCategories(shopEntity));
+        } else {
+            logger.warn("Shop with id " + shopId + " not found!");
+            return null;
+        }
+    }
+
     public List<ProductEntity> getShopProducts(Integer shopId){
-        ShopEntity shopEntity = shopRepository.findById(shopId).get();
+        ShopEntity shopEntity = shopRepository.getOne(shopId);
         if(shopEntity != null){
             return (List<ProductEntity>)shopEntity.getProducts();
         } else {
@@ -43,7 +54,7 @@ public class ShopService implements IShopService {
 
     @Override
     public List<ProductEntity> getShopProductsByCategory(ShopEntity shopEntity, Integer categoryId) {
-        CategoryEntity categoryEntity = categoryRepository.findById(categoryId).get();
+        CategoryEntity categoryEntity = categoryRepository.getOne(categoryId);
         if(categoryEntity != null) {
             return productRepository.findByCategoryAndShop(categoryEntity, shopEntity);
         } else {
@@ -53,14 +64,14 @@ public class ShopService implements IShopService {
     }
 
     @Override
+    public List<CategoryEntity> getShopCategories(ShopEntity shopEntity) {
+        return categoryRepository.findAll();
+    }
+
+    @Override
     public List<ProductEntity> getFeaturedProducts(ShopEntity shopEntity) {
         return getShopProductsByCategory(shopEntity, 1);
         //TODO: Mostrare prodotti in base alle ricerche/interessi dell'utente
     }
 
-    @Override
-    public ShopHomeBean getShopHome(Integer shopId) {
-        ShopEntity shopEntity = shopRepository.findById(shopId).get();
-        return new ShopHomeBean(shopEntity, getFeaturedProducts(shopEntity));
-    }
 }
